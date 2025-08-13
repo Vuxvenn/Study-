@@ -6,24 +6,27 @@
 using namespace std;
 
 int main () {
-    random_device rd;
-    mt19937 random_number_genarator(rd());
+    random_device rd; // để tạo seed ngẫu nhiên từ nhiều nguồn khác nhau
+    mt19937 random_number_genarator(rd()); // khởi tạo một bộ tạo số ngẫu nhiên Mersenne Twister (Mersenne Twister) bằng cách sử dụng một hạt giống ngẫu nhiên được tạo ra từ một bộ tạo số ngẫu nhiên khác
     
     int m;
     cin >> m;
 
     const int max_val = 1000000;
     vector<int> v(max_val);
-    iota(v.begin(), v.end(), 1); //-> điền một dãy các phần tử trong một vùng nhớ với các giá trị tăng dần bắt đầu từ một giá trị khởi tạo nhất định. Nó gán giá trị khởi tạo cho phần tử đầu tiên, sau đó tăng giá trị đó thêm 1 cho mỗi phần tử tiếp theo trong dãy. 
+    iota(v.begin(), v.end(), 1); // điền một dãy các phần tử trong một vùng nhớ với các giá trị tăng dần bắt đầu từ một giá trị khởi tạo nhất định. Nó gán giá trị khởi tạo cho phần tử đầu tiên, sau đó tăng giá trị đó thêm 1 cho mỗi phần tử tiếp theo trong dãy. 
 
 //Fisher–Yates shuffle (hoán vị ngẫu nhiên đều)
     for (int i = max_val - 1; i > 0; --i) {
         uniform_int_distribution<int> uni(0, i); // Lấy số ngẫu nhiên từ 0 tới i
-        auto n = uni(random_number_genarator);
-        swap(v[i],v[n]);
+        auto n = uni(random_number_genarator); // Tạo số ngẫu nhiên có giá trị từ 1 tới 1000000 và gán vào n
+        // nếu không sử dụng auto thì sẽ gây ra hiện tượng tràn số do bộ tạo mt19937 tạo số quá lớn dẫn đến việc xuất ra số âm
+        swap(v[i],v[n]); //đổi phần tử trong vector tại vị trí i đến vị trí n được tạo bất kì có giá trị từ 0 đến i
     }
+// Sau khi thực hiện Fisher–Yates shuffle xong thì các phần tử có giá trị từ 1 đến 1000000 tại vị trí tương ứng từ 1 đến 1000000 đã bị thay đổi vị trí ngẫu nhiên trong vector
+// => Điều này giúp cho việc tạo ra một vector có 1000000 số có các giá trị khác nhau tại những vị trí khác nhau mà không sợ bị trùng lặp
 
-//Lấy m số trong vector
+//Lấy m số đầu tiên trong vector đã thực hiện Fisher–Yates shuffle
     for (int i = 0; i < m; i++) {
         cout << v[i] << " ";
     }
