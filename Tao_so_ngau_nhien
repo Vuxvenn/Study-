@@ -1,0 +1,33 @@
+#include <iostream>
+#include <random> //mt19937
+#include <numeric> //iota 
+#include <vector>
+
+using namespace std;
+
+int main () {
+    random_device rd;
+    mt19937 random_number_genarator(rd());
+    
+    int m;
+    cin >> m;
+
+    const int max_val = 1000000;
+    vector<int> v(max_val);
+    iota(v.begin(), v.end(), 1); //-> điền một dãy các phần tử trong một vùng nhớ với các giá trị tăng dần bắt đầu từ một giá trị khởi tạo nhất định. Nó gán giá trị khởi tạo cho phần tử đầu tiên, sau đó tăng giá trị đó thêm 1 cho mỗi phần tử tiếp theo trong dãy. 
+
+//Fisher–Yates shuffle (hoán vị ngẫu nhiên đều)
+    for (int i = max_val - 1; i > 0; --i) {
+        uniform_int_distribution<int> uni(0, i); // Lấy số ngẫu nhiên từ 0 tới i
+        auto n = uni(random_number_genarator);
+        swap(v[i],v[n]);
+    }
+
+//Lấy m số trong vector
+    for (int i = 0; i < m; i++) {
+        cout << v[i] << " ";
+    }
+
+    system("pause");
+    return 0;
+}
