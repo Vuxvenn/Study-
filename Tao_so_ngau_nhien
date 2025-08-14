@@ -6,9 +6,14 @@
 using namespace std;
 
 int main () {
+    ios::sync_with_stdio(false); //Tắt đồng bộ giữa iostream C++ (cin/cout/cerr) với stdio.h của C (scanf/printf) -> Khi xuất số lượng lớn số thì sẽ chạy nhanh hơn
+    cin.tie(NULL); //cout sẽ không còn tự động flush (đẩy dữ liệu ra) trước khi cin đọc dữ liệu nữa. Mục đích chính của việc này là để tăng tốc độ xử lý đầu vào/đầu ra
+
     random_device rd; // để tạo seed ngẫu nhiên từ nhiều nguồn khác nhau
     mt19937 random_number_genarator(rd()); // khởi tạo một bộ tạo số ngẫu nhiên Mersenne Twister (Mersenne Twister) bằng cách sử dụng một hạt giống ngẫu nhiên được tạo ra từ một bộ tạo số ngẫu nhiên khác
-    
+// Vì sao không sử dụng hàm rand thay vì hàm mt19937? - Vì hàm rand trên nhiều compiler chỉ sinh được giá trị trong khoảng [0, 32767] (Rand_max thấp) không đáp ứng yêu cầu giá trị lên tới 1000000 của đề bài
+// Hàm mt19937 cho giá trị số ngẫu nhiên cực kì lớn (2^32 hoặc hơn) (Rand_max cao)
+
     int m;
     cin >> m;
 
@@ -17,11 +22,11 @@ int main () {
     iota(v.begin(), v.end(), 1); // điền một dãy các phần tử trong một vùng nhớ với các giá trị tăng dần bắt đầu từ một giá trị khởi tạo nhất định. Nó gán giá trị khởi tạo cho phần tử đầu tiên, sau đó tăng giá trị đó thêm 1 cho mỗi phần tử tiếp theo trong dãy. 
 
 //Fisher–Yates shuffle (hoán vị ngẫu nhiên đều)
-    for (int i = max_val - 1; i > 0; --i) {
-        uniform_int_distribution<int> uni(0, i); // Lấy số ngẫu nhiên từ 0 tới i
+    for (int i = 0; i < m; i++) {
+        uniform_int_distribution<int> uni(0, max_val - 1); // Lấy số ngẫu nhiên có giá trị từ đầu tới cuối vector (ở đây là 1000000)
         auto n = uni(random_number_genarator); // Tạo số ngẫu nhiên có giá trị từ 1 tới 1000000 và gán vào n
         // nếu không sử dụng auto thì sẽ gây ra hiện tượng tràn số do bộ tạo mt19937 tạo số quá lớn dẫn đến việc xuất ra số âm
-        swap(v[i],v[n]); //đổi phần tử trong vector tại vị trí i đến vị trí n được tạo bất kì có giá trị từ 0 đến i
+        swap(v[i],v[n]); //đổi phần tử trong vector tại vị trí i đến vị trí n được tạo bất kì có giá trị từ đầu đến cuối vector (ở đây là 1000000)
     }
 // Sau khi thực hiện Fisher–Yates shuffle xong thì các phần tử có giá trị từ 1 đến 1000000 tại vị trí tương ứng từ 1 đến 1000000 đã bị thay đổi vị trí ngẫu nhiên trong vector
 // => Điều này giúp cho việc tạo ra một vector có 1000000 số có các giá trị khác nhau tại những vị trí khác nhau mà không sợ bị trùng lặp
@@ -34,3 +39,4 @@ int main () {
     system("pause");
     return 0;
 }
+
