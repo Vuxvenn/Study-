@@ -1,5 +1,5 @@
 #include <iostream>
-#include <random> //mt19937
+#include <random> //mt19937, random_device, uniform_int_distribution
 #include <numeric> //iota 
 #include <vector>
 
@@ -7,12 +7,16 @@ using namespace std;
 
 int main () {
     ios::sync_with_stdio(false); //Tắt đồng bộ giữa iostream C++ (cin/cout/cerr) với stdio.h của C (scanf/printf) -> Khi xuất số lượng lớn số thì sẽ chạy nhanh hơn
-    cin.tie(NULL); //cout sẽ không còn tự động flush (đẩy dữ liệu ra) trước khi cin đọc dữ liệu nữa. Mục đích chính của việc này là để tăng tốc độ xử lý đầu vào/đầu ra
+    cin.tie(nullptr); //cout sẽ không còn tự động flush (đẩy dữ liệu ra) trước khi cin đọc dữ liệu nữa. Mục đích chính của việc này là để tăng tốc độ xử lý đầu vào/đầu ra
+// Ví dụ khi có tie: Bước 1:  cout << "Hello"; → "Hello" nằm trong buffer (bộ nhớ đệm), chưa chắc in ra màn hình Bước 2: cin >> x; → C++ bắt buộc flush cout để đảm bảo "Hello" đã hiện ra, rồi mới cho nhập.
+// Ví dụ khi không có tie: cout sẽ chỉ flush khi: buffer đầy, gặp endl/flush hoặc chương trình kết thúc. -> Điều này sẽ giảm rất nhiều lần flush dữ liệu ra khi I/O cực kì lớn
+// -> Giúp giảm thời gian chạy của chương trình
 
     random_device rd; // để tạo seed ngẫu nhiên từ nhiều nguồn khác nhau
     mt19937 random_number_genarator(rd()); // khởi tạo một bộ tạo số ngẫu nhiên Mersenne Twister (Mersenne Twister) bằng cách sử dụng một hạt giống ngẫu nhiên được tạo ra từ một bộ tạo số ngẫu nhiên khác
 // Vì sao không sử dụng hàm rand thay vì hàm mt19937? - Vì hàm rand trên nhiều compiler chỉ sinh được giá trị trong khoảng [0, 32767] (Rand_max thấp) không đáp ứng yêu cầu giá trị lên tới 1000000 của đề bài
 // Hàm mt19937 cho giá trị số ngẫu nhiên cực kì lớn (2^32 hoặc hơn) (Rand_max cao)
+// Tại sao hàm mt19937 phải truyền seed vào? - Vì nếu không truyền seed vào, mt19937 sẽ luôn khởi tạo bằng 5489 và giống nhau ở mọi lần chạy.
 
     int m;
     cin >> m;
